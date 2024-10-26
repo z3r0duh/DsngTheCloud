@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Computing Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .quiz-container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .question { font-weight: bold; }
+        .options { list-style-type: none; padding: 0; }
+        .options li { margin-bottom: 8px; }
+        #result { font-weight: bold; margin-top: 20px; }
+        .incorrect { color: red; }
+        button { padding: 10px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Cloud Computing Quiz</h1>
+        <form id="quizForm">
+            <div id="quiz">
+                <!-- Questions will be added here by JavaScript -->
+            </div>
+            <button type="button" onclick="submitQuiz()">Submit Quiz</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What feature of cloud computing allows applications to handle large demand and then scale back down?",
+                options: ["Multitenancy", "Virtualization", "Elasticity", "Security"],
+                answer: "Elasticity"
+            },
+            {
+                question: "What is Network Function Virtualization (NFV)?",
+                options: [
+                    "Replacing physical network devices with virtual versions in a cloud environment",
+                    "A method to increase data transfer speed",
+                    "An application deployment tool",
+                    "A form of network security"
+                ],
+                answer: "Replacing physical network devices with virtual versions in a cloud environment"
+            },
+            {
+                question: "What does VPC stand for?",
+                options: ["Virtual Public Cloud", "Virtual Private Cloud", "Virtual Proxy Cloud", "Virtual Protocol Cloud"],
+                answer: "Virtual Private Cloud"
+            },
+            {
+                question: "What does a VPN provide?",
+                options: [
+                    "Increased bandwidth",
+                    "Encrypted remote connection to a network",
+                    "Reduced storage",
+                    "Data caching"
+                ],
+                answer: "Encrypted remote connection to a network"
+            },
+            {
+                question: "What type of gateway allows VPCs to connect and communicate with each other?",
+                options: ["Internet Gateway", "Transit Gateway", "VPC Endpoint", "NAT Gateway"],
+                answer: "Transit Gateway"
+            },
+            {
+                question: "What feature allows devices in VPCs to translate to a public IP address for internet access?",
+                options: ["Transit Gateway", "VPC Endpoint", "NAT Gateway", "Security Groups"],
+                answer: "NAT Gateway"
+            },
+            {
+                question: "What type of rules can Security Groups and Lists enforce?",
+                options: [
+                    "TCP and UDP port rules",
+                    "User authentication",
+                    "Data encryption",
+                    "Application scaling"
+                ],
+                answer: "TCP and UDP port rules"
+            },
+            {
+                question: "What is the purpose of a VPC endpoint?",
+                options: [
+                    "Provide connectivity between VPCs in different cloud providers",
+                    "Encrypt all data in a VPC",
+                    "Scale applications on-demand",
+                    "Provide caching for applications"
+                ],
+                answer: "Provide connectivity between VPCs in different cloud providers"
+            },
+            {
+                question: "What is the benefit of using Network Security Groups?",
+                options: [
+                    "Allow more granularity in applying security rules",
+                    "Increase data transfer speeds",
+                    "Provide automatic scaling",
+                    "Allow public access to private resources"
+                ],
+                answer: "Allow more granularity in applying security rules"
+            },
+            {
+                question: "What is the function of an Internet Gateway in a VPC?",
+                options: [
+                    "To provide internal network connectivity",
+                    "To allow access to applications from the internet",
+                    "To encrypt all data",
+                    "To manage firewall settings"
+                ],
+                answer: "To allow access to applications from the internet"
+            }
+        ];
+
+        function loadQuiz() {
+            const quizDiv = document.getElementById('quiz');
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+                questionDiv.innerHTML = `<p>${index + 1}. ${q.question}</p>`;
+                
+                const optionsList = document.createElement('ul');
+                optionsList.classList.add('options');
+                
+                q.options.forEach(option => {
+                    const optionItem = document.createElement('li');
+                    optionItem.innerHTML = `
+                        <input type="radio" name="question${index}" value="${option}"> ${option}
+                    `;
+                    optionsList.appendChild(optionItem);
+                });
+                
+                questionDiv.appendChild(optionsList);
+                quizDiv.appendChild(questionDiv);
+            });
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            const incorrectAnswers = [];
+            questions.forEach((q, index) => {
+                const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+                if (selectedOption && selectedOption.value === q.answer) {
+                    score++;
+                } else {
+                    incorrectAnswers.push({
+                        question: q.question,
+                        selected: selectedOption ? selectedOption.value : "No answer",
+                        correct: q.answer
+                    });
+                }
+            });
+
+            // Display score
+            let resultHTML = `<p>Your score is: ${score} out of ${questions.length}</p>`;
+
+            // Display incorrect answers if there are any
+            if (incorrectAnswers.length > 0) {
+                resultHTML += "<h3>Incorrect Answers:</h3><ul>";
+                incorrectAnswers.forEach(item => {
+                    resultHTML += `
+                        <li>
+                            <strong>Question:</strong> ${item.question} <br>
+                            <span class="incorrect"><strong>Your Answer:</strong> ${item.selected}</span><br>
+                            <strong>Correct Answer:</strong> ${item.correct}
+                        </li><br>
+                    `;
+                });
+                resultHTML += "</ul>";
+            } else {
+                resultHTML += "<p>Congratulations! You got all the answers correct!</p>";
+            }
+
+            document.getElementById('result').innerHTML = resultHTML;
+        }
+
+        loadQuiz();
+    </script>
+</body>
+</html>
